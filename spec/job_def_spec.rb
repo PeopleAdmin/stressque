@@ -36,6 +36,12 @@ describe JobDef do
     end
   end
 
+  describe "#error_rate" do
+    it "should default to 0" do
+      job_def.error_rate.should == 0
+    end
+  end
+
   describe "#validate!" do
     it "should raise exception if queue is not present" do
       job_def.queue = nil
@@ -70,6 +76,10 @@ describe JobDef do
       job_class.instance_variable_get(:@runtime_range).should == (1..2)
     end
 
+    it "should return a job class with an @error_rate var matching the defs error_rate" do
+      job_class.instance_variable_get(:@error_rate).should == 0
+    end
+
     it "should have a perform class method defined" do
       job_class.respond_to?(:perform).should == true
     end
@@ -80,6 +90,11 @@ describe JobDef do
         bm = Benchmark.measure {job.perform}
         (bm.real > job_def.runtime_min).should == true
         (bm.real < job_def.runtime_max).should == true
+      end
+
+      it "should raise errors according to the job defs error rate." do
+        job_def.error_rate = 1.0
+        expect{job_class.perform}.to raise_error
       end
     end
   end
