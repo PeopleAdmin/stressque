@@ -1,4 +1,5 @@
 require "resque-stress/version"
+require 'resque-stress/utils'
 
 module Resque
   module Stress
