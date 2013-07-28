@@ -7,6 +7,11 @@ module Resque
         ctx.harness_context.harness
       end
 
+      def self.eval_file(path)
+        raise "File not found: #{path}" unless File.exists? path
+        eval(File.read(path))
+      end
+
       class GlobalContext
         attr_accessor :harness_context
 
@@ -14,7 +19,7 @@ module Resque
           self.harness_context = HarnessContext.new(name)
           self.harness_context.eval(&block)
         end
-      end  
+      end
 
       class KeywordContext
         def self.target_named(key)
@@ -61,13 +66,13 @@ module Resque
         target_named :job
 
         def initialize(queue_context, class_name)
-          self.job = JobDef.new  
+          self.job = JobDef.new
           self.job.queue = queue_context.queue
           self.job.class_name = class_name
         end
 
         def weight(val)
-          job.weight = val 
+          job.weight = val
         end
 
         def runtime_min(val)

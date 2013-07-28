@@ -1,21 +1,41 @@
+require 'digest'
+require 'fileutils'
+require 'tmpdir'
 require 'spec_helper'
 
 describe Resque::Stress::DSL do
-  describe "#eval" do
-    let(:source) {<<-SRC
-      harness :my_rig do
-        queue :my_queue do
-          job :my_job do
-            weight 10
-            runtime_min 2
-            runtime_max 4
-            error_rate 0.1
-          end
+  let(:source) {<<-SRC
+    harness :my_rig do
+      queue :my_queue do
+        job :my_job do
+          weight 10
+          runtime_min 2
+          runtime_max 4
+          error_rate 0.1
         end
       end
-    SRC
-    }
+    end
+  SRC
+  }
 
+  describe "#eval_file" do
+    let(:path) {File.join(Dir.tmpdir, 'resque-stress.dsl')}
+    before do
+      File.write(path, source)
+    end
+
+    it "should parse file contents as a DSL" do
+      harness = Resque::Stress::DSL.eval_file(path)
+      harness.kind_of?(Resque::Stress::Harness).should == true
+    end
+
+    it "should raise an error if the file doesn't exist" do
+      path = Digest::MD5.hexdigest(rand.to_s)
+      expect{Resque::Stress::DSL.eval_file(path)}.to raise_error
+    end
+  end
+
+  describe "#eval" do
     let(:harness) {Resque::Stress::DSL.eval(source)}
     let(:queue) {harness.queues.first}
     let(:job) {queue.jobs.first}
