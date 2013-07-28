@@ -1,6 +1,6 @@
 require "resque-stress/version"
 require 'resque-stress/utils'
-require 'resque-stress/worker_def'
+require 'resque-stress/job_def'
 
 module Resque
   module Stress

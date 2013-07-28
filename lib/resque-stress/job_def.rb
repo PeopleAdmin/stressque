@@ -1,7 +1,7 @@
 require 'set'
 require 'active_support/core_ext/string/inflections'
 
-class WorkerDef
+class JobDef
   attr_accessor :queue, :weight
   attr_writer :runtime_min, :runtime_max
   attr_reader :class_name
