@@ -2,9 +2,15 @@ require 'spec_helper'
 require 'benchmark'
 
 describe Resque::Stress::JobDef do
+  let(:harness) {Resque::Stress::Harness.new}
+  let(:queue) {Resque::Stress::QueueDef.new}
   let(:job_def) {Resque::Stress::JobDef.new}
   before do
-    job_def.queue = :my_queue
+    harness.queues << queue
+    queue.parent = harness
+    queue.name = :my_queue
+    queue.jobs << job_def
+    job_def.queue = queue
     job_def.class_name = :my_job
   end
 
@@ -33,6 +39,12 @@ describe Resque::Stress::JobDef do
   describe "#weight" do
     it "should default to 1" do
       job_def.weight.should == 1
+    end
+  end
+
+  describe "#likelihood" do
+    it "should be equal to the weight divided by total weight of all jobs" do
+      job_def.likelihood.should == 1
     end
   end
 

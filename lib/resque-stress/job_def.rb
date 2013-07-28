@@ -22,6 +22,10 @@ module Resque
         @weight ||= 1
       end
 
+      def likelihood
+        @likelihood ||= weight.to_f / queue.harness.total_weight
+      end
+
       def runtime_min
         @runtime_min ||= 1
       end
@@ -47,7 +51,7 @@ module Resque
           class ::#{class_name}
             extend Resque::Stress::Utils
 
-            @queue = :#{queue.to_s}
+            @queue = :#{queue.name}
             @runtime_range = #{runtime_min}.to_f..#{runtime_max}.to_f
             @error_rate = #{error_rate}
 
