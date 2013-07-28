@@ -14,12 +14,12 @@ describe Resque::Stress::Harness do
     end
   end
 
-  describe "#all_jobs" do
+  context "aggregate ops" do
     let(:queue1) {Resque::Stress::QueueDef.new}
     let(:queue2) {Resque::Stress::QueueDef.new}
-    let(:job1) {Resque::Stress::JobDef.new}
-    let(:job2) {Resque::Stress::JobDef.new}
-    let(:job3) {Resque::Stress::JobDef.new}
+    let(:job1) {Resque::Stress::JobDef.new} 
+    let(:job2) {Resque::Stress::JobDef.new} 
+    let(:job3) {Resque::Stress::JobDef.new} 
 
     before do
       queue1.name = 'queue1'
@@ -36,14 +36,23 @@ describe Resque::Stress::Harness do
       harness.queues << queue1
       harness.queues << queue2
     end
+  
+    describe "#all_jobs" do
+      it "should contain jobs from all queues" do
+        result = Set.new(harness.all_jobs)
+        result.should == Set.new([job1, job2, job3])
+      end
 
-    it "should contain jobs from all queues" do
-      result = Set.new(harness.all_jobs)
-      result.should == Set.new([job1, job2, job3])
+      it "should have jobs sorted according to weight" do
+        harness.all_jobs.should == [job2, job3, job1]
+      end
     end
 
-    it "should have jobs sorted according to weight" do
-      harness.all_jobs.should == [job2, job3, job1]
+    describe "#total_weight" do
+      it "should evaluate to the sum of all job weights" do
+        expected = job1.weight + job2.weight + job3.weight
+        harness.total_weight.should == expected
+      end
     end
   end
 end

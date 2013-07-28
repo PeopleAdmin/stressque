@@ -16,6 +16,10 @@ module Resque
         queues.map(&:jobs).flatten.sort &reverse_by_weight
       end
 
+      def total_weight
+        all_jobs.inject(0) {|memo, job| memo += job.weight}
+      end
+
       private
       def reverse_by_weight
         lambda {|i, j| j.weight <=> i.weight}
