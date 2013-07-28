@@ -43,7 +43,7 @@ module Resque
         end
 
         def queue(name, &block)
-          queue_context = QueueDefContext.new(name)
+          queue_context = QueueDefContext.new(name, self.harness)
           harness.queues << queue_context.eval(&block)
         end
       end
@@ -51,8 +51,9 @@ module Resque
       class QueueDefContext < KeywordContext
         target_named :queue
 
-        def initialize(name)
+        def initialize(name, harness)
           self.queue = QueueDef.new
+          self.queue.parent = harness
           self.queue.name = name
         end
 

@@ -1,7 +1,7 @@
 module Resque
   module Stress
     class QueueDef
-      attr_accessor :name
+      attr_accessor :name, :parent
       attr_reader :jobs
 
       def jobs
@@ -9,6 +9,7 @@ module Resque
       end
 
       def validate!
+        raise "Parent harness not specified" unless parent
         raise "Queue name not specified" unless name
       end
     end

@@ -48,6 +48,10 @@ describe Resque::Stress::DSL do
       harness.queues.size.should == 1
     end
 
+    it "should set the queue's parent as the harness" do
+      queue.parent.should == harness
+    end
+
     it "should populate the queue's name" do
       queue.name.should == :my_queue
     end
