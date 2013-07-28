@@ -24,19 +24,24 @@ describe Resque::Stress::Harness do
     before do
       queue1.name = 'queue1'
       queue1.jobs << job1
+      job1.queue = queue1
       queue1.jobs << job3
+      job3.queue = queue1
 
       queue2.name = 'queue2'
       queue2.jobs << job2
+      job2.queue = queue2
 
       job1.weight = 1
-      job2.weight = 4
-      job3.weight = 3
+      job2.weight = 3
+      job3.weight = 2
 
       harness.queues << queue1
+      queue1.parent = harness
       harness.queues << queue2
+      queue2.parent = harness
     end
-  
+
     describe "#all_jobs" do
       it "should contain jobs from all queues" do
         result = Set.new(harness.all_jobs)
@@ -52,6 +57,28 @@ describe Resque::Stress::Harness do
       it "should evaluate to the sum of all job weights" do
         expected = job1.weight + job2.weight + job3.weight
         harness.total_weight.should == expected
+      end
+    end
+
+    describe "#job_for_roll" do
+      it "should correctly pick job defs according to weighting" do
+        harness.pick_job_def(0.1).should == job2
+        harness.pick_job_def(0.2).should == job2
+        harness.pick_job_def(0.3).should == job2
+        harness.pick_job_def(0.4).should == job2
+        harness.pick_job_def(0.5).should == job2
+        harness.pick_job_def(0.6).should == job3
+        harness.pick_job_def(0.7).should == job3
+        harness.pick_job_def(0.8).should == job3
+        harness.pick_job_def(0.9).should == job1
+      end
+
+      it "should pick most likely job for any arg < 0" do
+        harness.pick_job_def(-1).should == job2
+      end
+
+      it "should pick least likely job for any arg >= 1" do
+        harness.pick_job_def(1.0).should == job1
       end
     end
   end
