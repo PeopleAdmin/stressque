@@ -1,8 +1,8 @@
 require 'spec_helper'
 require 'benchmark'
 
-describe JobDef do
-  let(:job_def) {JobDef.new}
+describe Resque::Stress::JobDef do
+  let(:job_def) {Resque::Stress::JobDef.new}
   before do
     job_def.queue = :my_queue
     job_def.class_name = :my_job

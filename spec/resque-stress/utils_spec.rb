@@ -1,8 +1,8 @@
 require 'spec_helper'
 require 'benchmark'
 
-describe Utils do
-  include Utils
+describe Resque::Stress::Utils do
+  include Resque::Stress::Utils
 
   describe "#hard_sleep" do
     it "should take > length to perform" do
