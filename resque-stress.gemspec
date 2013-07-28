@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.add_dependency "resque"
   gem.add_dependency "active_support"
+  gem.add_development_dependency "rake"
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "pry"
   gem.add_development_dependency "pry_debug"
