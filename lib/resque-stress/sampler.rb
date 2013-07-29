@@ -21,7 +21,7 @@ module Resque
       def run
         while(true) do
           sleep(sample_rate.to_f)
-          stat_handler.call(current_stats)
+          stat_handler.call(*current_stats)
         end
       end
     end

@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+require 'text-table'
 require 'resque-stress'
 require 'resque-stress/cli'
 
@@ -14,5 +15,18 @@ rescue StandardError => e
 end
 
 injector = Resque::Stress::Injector.new(harness)
-puts "Running..."
+sampler = Resque::Stress::Sampler.new(harness, injector, 3)
+sampler.stat_handler = Proc.new do |*row|
+  table = Text::Table.new
+  table.head = %w{target_rate current_rate total_injections}
+  table.rows << row
+  puts table
+end
+fork do
+  p "Running the sampler..."
+  sampler.run
+  puts "Exiting the sampler"
+end
+p "Running the injector..."
 injector.run
+puts "Exiting the injector"
