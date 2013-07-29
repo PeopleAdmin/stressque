@@ -30,30 +30,30 @@ harness :my_load_scenario do
       # pool of jobs.  The likelihood a job is
       # to be enqueued is its weight / sum of all
       # job weights.  Defaults to 1.
-      weight: 5
+      weight 5
 
-      # The range of time it should take to perform
-      # the job.  A random value will be chosen
-      # within this range, and the job will "hard
-      # sleep" for that time.  A hard sleep is one
-      # that actually pegs the CPU for the duration
-      # to simulate workload.  Default range is
-      # 1..1
-      runtime_range: 1..2
+      # The minimum amount of time to perform the
+      # job.  Defaults to 1.
+      runtime_min 5
+
+      # The maximum amount of time to perform the
+      # job.  Defaults to 2.  The runtime is a
+      # random between runtime_min..runtime_max
+      runtime_max 10
 
       # The error_rate to maintain within the job.
       # Approximately this percentage of enqueues
       # will result in a failure of the job.  The
       # default is 0
-      error_rate: .1
+      error_rate 0.1
     end
 
     # another job within the same queue
     job :slow_email do
-      weight: 1
-      runtime_min: 5
-      runtime_max: 10
-      error_rate: .2
+      weight 1
+      runtime_min 5
+      runtime_max 10
+      error_rate 0.2
     end
   end
 
@@ -61,8 +61,8 @@ harness :my_load_scenario do
   queue :reports do
     # another job within the queue.
     job :eeo do
-      weight: 1
-      error_rate: .05
+      weight 1
+      error_rate 0.05
     end
   end
 end
