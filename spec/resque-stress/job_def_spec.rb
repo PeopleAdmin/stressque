@@ -76,24 +76,47 @@ describe Resque::Stress::JobDef do
     before {job_def.runtime_max = 2}
     let(:job_class) {job_def.to_job_class}
 
-    it "should return a job class with a name matching the defs class_name" do
-      job_class.should == MyJob
+    context "without existing job classes" do
+      it "should return a job class with a name matching the defs class_name" do
+        job_class.should == MyJob
+      end
+
+      it "should return a job class with a @queue variable matching the defs queue" do
+        job_class.instance_variable_get(:@queue).should == :my_queue
+      end
+
+      it "should return a job class with a @runtime_range var that is def.runtime_min..def.runtime_max" do
+        job_class.instance_variable_get(:@runtime_range).should == (1..2)
+      end
+
+      it "should return a job class with an @error_rate var matching the defs error_rate" do
+        job_class.instance_variable_get(:@error_rate).should == 0
+      end
+
+      it "should have a perform class method defined" do
+        job_class.respond_to?(:perform).should == true
+      end
     end
 
-    it "should return a job class with a @queue variable matching the defs queue" do
-      job_class.instance_variable_get(:@queue).should == :my_queue
-    end
+    context "with existing job class" do
+      before do
+        class MyJob
+          @queue = :my_queue
 
-    it "should return a job class with a @runtime_range var that is def.runtime_min..def.runtime_max" do
-      job_class.instance_variable_get(:@runtime_range).should == (1..2)
-    end
+          def self.perform
+            "original"
+          end
+        end
+        @original_class = MyJob
+      end
 
-    it "should return a job class with an @error_rate var matching the defs error_rate" do
-      job_class.instance_variable_get(:@error_rate).should == 0
-    end
+      it "should modify the original class" do
+        job_class.should == @original_class
+      end
 
-    it "should have a perform class method defined" do
-      job_class.respond_to?(:perform).should == true
+      it "should redefine the existing #perform behavior" do
+        job_class.perform.should_not == "original"
+      end
     end
 
     describe "#perform" do

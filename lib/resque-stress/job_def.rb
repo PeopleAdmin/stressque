@@ -47,6 +47,14 @@ module Resque
       end
 
       def to_job_class
+        unless @job_class
+          @job_class = define_job_class
+        end
+        @job_class
+      end
+
+      private
+      def define_job_class
         class_def = <<-SRC
           class ::#{class_name}
             extend Resque::Stress::Utils
