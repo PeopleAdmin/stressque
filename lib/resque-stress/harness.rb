@@ -4,6 +4,10 @@ module Resque
       attr_accessor :name
       attr_writer :target_rate
 
+      def freeze_classes!
+        all_jobs.map(&:to_job_class).each {|job_class| job_class.freeze}
+      end
+
       def queues
         @queues ||= []
       end

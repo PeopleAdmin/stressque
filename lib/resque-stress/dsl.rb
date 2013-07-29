@@ -4,7 +4,6 @@ module Resque
       def self.eval(source)
         ctx = GlobalContext.new
         ctx.instance_exec {eval(source)}
-        ctx.harness_context.harness
       end
 
       def self.eval_file(path)

@@ -49,6 +49,8 @@ module Resque
       def to_job_class
         unless @job_class
           @job_class = define_job_class
+          # TODO this should work, but breaks in tests.  Why?
+          # @job_class.freeze
         end
         @job_class
       end

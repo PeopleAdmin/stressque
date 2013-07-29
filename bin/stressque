@@ -13,6 +13,7 @@ rescue StandardError => e
   $stderr.write("Error parsing #{cli.config[:config]} - #{e}\n")
   exit(-1)
 end
+harness.freeze_classes!
 
 injector = Resque::Stress::Injector.new(harness)
 sampler = Resque::Stress::Sampler.new(harness, injector, 3)
