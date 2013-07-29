@@ -2,9 +2,14 @@ module Resque
   module Stress
     class Harness
       attr_accessor :name
+      attr_writer :target_rate
 
       def queues
         @queues ||= []
+      end
+
+      def target_rate
+        @target_rate ||= 100
       end
 
       def validate!

@@ -46,6 +46,10 @@ module Resque
           queue_context = QueueDefContext.new(name, self.harness)
           harness.queues << queue_context.eval(&block)
         end
+
+        def target_rate(val)
+          harness.target_rate = val
+        end
       end
 
       class QueueDefContext < KeywordContext

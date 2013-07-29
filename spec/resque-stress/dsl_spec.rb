@@ -6,6 +6,8 @@ require 'spec_helper'
 describe Resque::Stress::DSL do
   let(:source) {<<-SRC
     harness :my_rig do
+      target_rate 1000
+
       queue :my_queue do
         job :my_job do
           weight 10
@@ -46,6 +48,10 @@ describe Resque::Stress::DSL do
 
     it "should populate the harness's queues" do
       harness.queues.size.should == 1
+    end
+
+    it "should populate the harness's target_rate" do
+      harness.target_rate.should == 1000
     end
 
     it "should set the queue's parent as the harness" do
