@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+require 'resque-stress'
+require 'resque-stress/cli'
+
+cli = Resque::Stress::CLI.new
+cli.parse_options
+
+begin
+  harness = Resque::Stress::DSL.eval_file(cli.config[:config])
+rescue StandardError => e
+  $stderr.write("Error parsing #{cli.config[:config]} - #{e}\n")
+  exit(-1)
+end
+
+injector = Resque::Stress::Injector.new(harness)
+puts "Running..."
+injector.run
