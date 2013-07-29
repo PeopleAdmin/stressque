@@ -25,6 +25,14 @@ describe Resque::Stress::Injector do
     end
   end
 
+  describe "#total_injections" do
+    it "should return all injections made" do
+      injector.mark_time(1)
+      injector.mark_time(2)
+      injector.total_injections.should == 2
+    end
+  end
+
   describe "#last_100_timestamps" do
     it "should return the exact count if length < 100" do
       injector.mark_time(1)

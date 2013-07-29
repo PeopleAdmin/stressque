@@ -21,9 +21,12 @@ module Resque
         end
       end
 
+      def total_injections
+        redis.llen(:timestamps)
+      end
+
       def last_100_timestamps
-        # this could probably be made more efficient with sorted sets.
-        redis.lrange(:timestamps, 0, 99).map(&:to_f).sort
+        redis.lrange(:timestamps, -100, -1).map(&:to_f)
       end
 
       def current_rate
@@ -40,7 +43,7 @@ module Resque
 
       private
       def mark_time(now=Time.now.utc)
-        redis.lpush(:timestamps, now.to_f.floor)
+        redis.rpush(:timestamps, now.to_f.floor)
       end
     end
   end
