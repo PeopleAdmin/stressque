@@ -33,52 +33,33 @@ describe Resque::Stress::Injector do
     end
   end
 
-  describe "#last_100_timestamps" do
-    it "should return the exact count if length < 100" do
-      injector.mark_time(1)
-      injector.mark_time(2)
-      injector.last_100_timestamps.should == [1,2]
-    end
-
-    it "should truncate results to 100 if over that amount" do
-      (0..125).each do |i|
-        injector.mark_time(i)
-      end
-      injector.last_100_timestamps.size.should == 100
-    end
-  end
-
   describe "#current_rate" do
     it "should return 0 when nothing has been tracked" do
       injector.current_rate == 0
     end
 
     it "should return injections per second" do
-      injector.mark_time(1.0)
-      injector.mark_time(2.0)
-      injector.current_rate.should == 2
+      start = Time.now.utc
+      (1..100).each {injector.mark_time}
+      finish = Time.now.utc
+      sleep_time = 1.0 - (finish - start)
+      sleep(sleep_time)
+      (50..100).include?(injector.current_rate).should == true
     end
   end
 
   describe "#too_fast?" do
     it "should return true when current rate faster than target rate" do
       harness.target_rate = 1.0
-      injector.mark_time(1.0)
-      injector.mark_time(2.0)
+      (1..100).each {injector.mark_time}
+      sleep(0.1)
       injector.too_fast?.should == true
     end
 
     it "should return false when current rate slower than target rate" do
-      harness.target_rate = 3.0
-      injector.mark_time(1.0)
-      injector.mark_time(1.1)
-      injector.too_fast?.should == false
-    end
-
-    it "should return false when current rate is equal to target rate" do
-      harness.target_rate = 2.0
-      injector.mark_time(1.0)
-      injector.mark_time(2.0)
+      harness.target_rate = 100.0
+      injector.mark_time
+      injector.mark_time
       injector.too_fast?.should == false
     end
   end

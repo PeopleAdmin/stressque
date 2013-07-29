@@ -12,8 +12,10 @@ module Resque
       end
 
       def run
+        redis.flushdb
         running = true
         while(running) do
+          sleep(0.003)
           next if too_fast?
           klass = harness.pick_job_def.to_job_class
           Resque.enqueue klass
@@ -25,16 +27,10 @@ module Resque
         redis.llen(:timestamps)
       end
 
-      def last_100_timestamps
-        redis.lrange(:timestamps, -100, -1).map(&:to_f)
-      end
-
       def current_rate
-        timestamps = last_100_timestamps
-        return 0 if timestamps.nil? or timestamps.empty?
-        time_span = timestamps[-1] - timestamps[0]
-        return 0 if time_span == 0
-        timestamps.size.to_f / time_span
+        duration = elapsed_time
+        return 0 if duration == 0
+        total_injections / duration
       end
 
       def too_fast?
@@ -44,6 +40,12 @@ module Resque
       private
       def mark_time(now=Time.now.utc)
         redis.rpush(:timestamps, now.to_f.floor)
+      end
+
+      def elapsed_time
+        earliest = redis.lrange(:timestamps, 0, 0).first.to_f
+        latest = Time.now.utc.to_f
+        (earliest && latest) ? latest - earliest : 0
       end
     end
   end
