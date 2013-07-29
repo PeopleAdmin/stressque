@@ -22,11 +22,12 @@ sampler.stat_handler = Proc.new do |*row|
   table.rows << row
   puts table
 end
-fork do
-  p "Running the sampler..."
+if pid=fork
+  p "Running the injector (#{$$})"
+  injector.run
+  puts "Exiting the injector"
+else
+  p "Running the sampler (#{$$})"
   sampler.run
   puts "Exiting the sampler"
 end
-p "Running the injector..."
-injector.run
-puts "Exiting the injector"
