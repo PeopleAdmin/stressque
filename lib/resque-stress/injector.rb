@@ -1,5 +1,3 @@
-require 'redis-namespace'
-
 module Resque
   module Stress
     class Injector
@@ -8,7 +6,7 @@ module Resque
 
       def initialize(harness)
         @harness = harness
-        @redis = Redis::Namespace.new(:stress, Resque.redis)
+        @redis = Resque.redis
       end
 
       def run
@@ -24,7 +22,7 @@ module Resque
       end
 
       def total_injections
-        redis.llen(:timestamps)
+        redis.llen(ts_key)
       end
 
       def current_rate
@@ -39,13 +37,17 @@ module Resque
 
       private
       def mark_time(now=Time.now.utc)
-        redis.rpush(:timestamps, now.to_f.floor)
+        redis.rpush(ts_key, now.to_f.floor)
       end
 
       def elapsed_time
-        earliest = redis.lrange(:timestamps, 0, 0).first.to_f
+        earliest = redis.lrange(ts_key, 0, 0).first.to_f
         latest = Time.now.utc.to_f
         (earliest && latest) ? latest - earliest : 0
+      end
+
+      def ts_key
+        "stressque:timestamps"
       end
     end
   end
