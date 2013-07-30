@@ -1,14 +1,57 @@
 resque-stress
 =============
 
-Stress testing of resque workers
+Stress testing of Resque workers.
 
 Usage
-=====
+-----
+Basic usage is to:
 
-The above usage is from the examples/rails_demo app.
+1. Define a test harness using the provided DSL.
+2. Wire stressque into your app so that it redefines your workers using the
+harness definition.
+3. Fire up Resque.
+4. Run stressque.
 
-1. Define a test harness using the resque-stress DSL.
+The following walkthrough is from the examples/rails_demo app.  If you have the
+following jobs defined...
+
+```ruby
+class SalesReportJob
+  @queue = :reports
+
+  def self.perform(customer_id, start_date, end_date)
+  # a bunch of really complicated stuff.
+  end
+end
+
+class InventoryReportJob
+  @queue = :reports
+
+  def self.perform(customer_id, start_date, end_date)
+  # a bunch of really complicated stuff.
+  end
+end
+
+class ImportJob
+  @queue = :import_export
+
+  def self.perform(customer_id, file)
+  # a bunch of really complicated stuff.
+  end
+end
+
+class ExportJob
+  @queue = :import_export
+
+  def self.perform(customer_id, file)
+  # a bunch of really complicated stuff.
+  end
+end
+
+```
+
+You can define a test harness using the resque-stress DSL...
 
 ```ruby
 harness :rails_demo do
@@ -47,7 +90,8 @@ harness :rails_demo do
 end
 ```
 
-2. Configure your app to make use of the DSL generated workers.
+Which should be initialized within your app to redefine your workers for stress
+testing...
 
 ```ruby
 require 'resque'
@@ -64,20 +108,25 @@ harness = Resque::Stress::DSL.eval_file(path)
 harness.freeze_classes!
 ```
 
-3. Run Resque in your app to pick up any jobs.
+Now you can run Resque to pick up any jobs...
 
 ```
 QUEUES=* VVERBOSE=1 be rake resque:work
 ```
 
-4. Run the test harness.
+And the test harness to perform injections according to your definition...
 
 ```be stressque -c examples/demo.dsl -r localhost:6379:15```
 
-5. Examine the results.
+And watch the injections stream by...
+
+![Output](http://i.imgur.com/cOrQiaR.png)
+
+You can see the full diff for the commit to enable this in the rails_demo
+app here: [https://github.com/lwoodson/resque-stress/commit/c8ba8fad7ab63f1f0b1a25a81311db96454015ac](https://github.com/lwoodson/resque-stress/commit/c8ba8fad7ab63f1f0b1a25a81311db96454015ac)
 
 DSL
-===
+---
 The examples/demo.dsl file has comments describing the dsl in details.
 
 ```ruby
@@ -139,3 +188,42 @@ harness :my_load_scenario do
   end
 end
 ```
+
+Make the jump to hyperspace
+---------------------------
+resque-stress is distributable in the same machine or on different machines
+to up the load.  They simply have to share the same redis db.  You can test
+this as follows:
+
+Open 3 terminals, in the first, run top...
+
+```top -o cpu```
+
+In the second terminal run the examples/as_fast_as_you_can.dsl file...
+
+```be bin/stressque -c examples/as_fast_as_you_can```
+
+View the CPU use and injection rate with 1 injector...
+
+![One Process Output](http://i.imgur.com/edtlAK8.png)
+
+Kill the first injector, then immediately restart it.  In the third terminal
+run the examples/as_fast_as_you_can.dsl file as above.  Now you can view the
+CPU use and injection rate with 2 injectors.
+
+![Two Process Output](http://i.imgur.com/dO9bwtz.png)
+
+From Here
+---------
+Here are a few things I'd like to do.
+
+1. Per-job rate tracking
+2. Rate equalization profile (throttle up, parabollas, etc..)
+
+Contributing
+------------
+1. Fork it
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create new Pull Request
