@@ -13,8 +13,10 @@ module Resque
         redis.flushdb
         running = true
         while(running) do
-          sleep(0.003)
-          next if too_fast?
+          if too_fast?
+            sleep(0.003)
+            next
+          end
           klass = harness.pick_job_def.to_job_class
           Resque.enqueue klass
           mark_time
