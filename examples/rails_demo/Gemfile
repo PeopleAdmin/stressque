@@ -23,8 +23,6 @@ end
 gem 'jquery-rails'
 gem 'resque'
 gem 'resque-stress', path: File.join('..','..')
-gem 'pry'
-gem 'pry-debugger'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
