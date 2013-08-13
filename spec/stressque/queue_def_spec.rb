@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Resque::Stress::QueueDef do
+describe Stressque::QueueDef do
   describe "#validate!" do
-    let(:queue_def) {Resque::Stress::QueueDef.new}
+    let(:queue_def) {Stressque::QueueDef.new}
     before do
-      queue_def.parent = Resque::Stress::Harness.new
+      queue_def.parent = Stressque::Harness.new
       queue_def.name = "test"
     end
 

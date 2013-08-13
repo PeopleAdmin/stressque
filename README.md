@@ -1,4 +1,4 @@
-resque-stress
+stressque
 =============
 
 Stress testing of Resque workers.
@@ -51,7 +51,7 @@ end
 
 ```
 
-You can define a test harness using the resque-stress DSL...
+You can define a test harness using the stressque DSL...
 
 ```ruby
 harness :rails_demo do
@@ -99,12 +99,12 @@ require 'resque'
 Resque.redis = 'localhost:6379:15'
 Resque.redis.flushdb
 
-require 'resque-stress'
+require 'stressque'
 
 load File.join(Rails.root, 'lib', 'jobs.rb')
 
 path = File.join(Rails.root, 'config', 'stressque.dsl')
-harness = Resque::Stress::DSL.eval_file(path)
+harness = Stressque::DSL.eval_file(path)
 harness.freeze_classes!
 ```
 
@@ -123,7 +123,7 @@ And watch the injections stream by...
 ![Output](http://i.imgur.com/cOrQiaR.png)
 
 You can see the full diff for the commit to enable this in the rails_demo
-app here: [https://github.com/lwoodson/resque-stress/commit/c8ba8fad7ab63f1f0b1a25a81311db96454015ac](https://github.com/lwoodson/resque-stress/commit/c8ba8fad7ab63f1f0b1a25a81311db96454015ac)
+app here: [https://github.com/lwoodson/stressque/commit/c8ba8fad7ab63f1f0b1a25a81311db96454015ac](https://github.com/lwoodson/stressque/commit/c8ba8fad7ab63f1f0b1a25a81311db96454015ac)
 
 DSL
 ---
@@ -191,7 +191,7 @@ end
 
 Make the jump to hyperspace
 ---------------------------
-resque-stress is distributable in the same machine or on different machines
+stressque is distributable in the same machine or on different machines
 to up the load.  They simply have to share the same redis db.  You can test
 this as follows:
 

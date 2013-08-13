@@ -3,7 +3,7 @@ require 'fileutils'
 require 'tmpdir'
 require 'spec_helper'
 
-describe Resque::Stress::DSL do
+describe Stressque::DSL do
   let(:source) {<<-SRC
     harness :my_rig do
       target_rate 1000
@@ -21,24 +21,24 @@ describe Resque::Stress::DSL do
   }
 
   describe "#eval_file" do
-    let(:path) {File.join(Dir.tmpdir, 'resque-stress.dsl')}
+    let(:path) {File.join(Dir.tmpdir, 'stressque.dsl')}
     before do
       File.write(path, source)
     end
 
     it "should parse file contents as a DSL" do
-      harness = Resque::Stress::DSL.eval_file(path)
-      harness.kind_of?(Resque::Stress::Harness).should == true
+      harness = Stressque::DSL.eval_file(path)
+      harness.kind_of?(Stressque::Harness).should == true
     end
 
     it "should raise an error if the file doesn't exist" do
       path = Digest::MD5.hexdigest(rand.to_s)
-      expect{Resque::Stress::DSL.eval_file(path)}.to raise_error
+      expect{Stressque::DSL.eval_file(path)}.to raise_error
     end
   end
 
   describe "#eval" do
-    let(:harness) {Resque::Stress::DSL.eval(source)}
+    let(:harness) {Stressque::DSL.eval(source)}
     let(:queue) {harness.queues.first}
     let(:job) {queue.jobs.first}
 

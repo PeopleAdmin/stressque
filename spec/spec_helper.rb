@@ -1,4 +1,4 @@
-require 'resque-stress'
+require 'stressque'
 
 RSpec.configure do |config|
   config.before(:each) do

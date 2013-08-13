@@ -1,9 +1,9 @@
 require 'timeout'
 require 'spec_helper'
 
-Resque::Stress::Injector.send(:public, :mark_time)
+Stressque::Injector.send(:public, :mark_time)
 
-describe Resque::Stress::Injector do
+describe Stressque::Injector do
   let(:harness) {
     src = <<-SRC
       harness :my_rig do
@@ -14,9 +14,9 @@ describe Resque::Stress::Injector do
         end
       end
     SRC
-    Resque::Stress::DSL.eval(src)
+    Stressque::DSL.eval(src)
   }
-  let(:injector) {Resque::Stress::Injector.new(harness)}
+  let(:injector) {Stressque::Injector.new(harness)}
   describe "#run" do
     it "injects jobs into queue" do
       timeout(0.1) {injector.run} rescue nil

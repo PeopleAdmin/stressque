@@ -1,10 +1,10 @@
 require 'spec_helper'
 require 'benchmark'
 
-describe Resque::Stress::JobDef do
-  let(:harness) {Resque::Stress::Harness.new}
-  let(:queue) {Resque::Stress::QueueDef.new}
-  let(:job_def) {Resque::Stress::JobDef.new}
+describe Stressque::JobDef do
+  let(:harness) {Stressque::Harness.new}
+  let(:queue) {Stressque::QueueDef.new}
+  let(:job_def) {Stressque::JobDef.new}
   before do
     harness.queues << queue
     queue.parent = harness

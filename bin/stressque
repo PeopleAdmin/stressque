@@ -3,24 +3,24 @@ require 'resque'
 require 'text-table'
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'resque-stress/cli'
+require 'stressque/cli'
 
-cli = Resque::Stress::CLI.new
+cli = Stressque::CLI.new
 cli.parse_options
 Resque.redis = cli.config[:redis] if cli.config[:redis]
 
-require 'resque-stress'
+require 'stressque'
 
 begin
-  harness = Resque::Stress::DSL.eval_file(cli.config[:config])
+  harness = Stressque::DSL.eval_file(cli.config[:config])
 rescue StandardError => e
   $stderr.write("Error parsing #{cli.config[:config]} - #{e}\n")
   exit(-1)
 end
 harness.freeze_classes!
 
-injector = Resque::Stress::Injector.new(harness)
-sampler = Resque::Stress::Sampler.new(harness, injector, 3)
+injector = Stressque::Injector.new(harness)
+sampler = Stressque::Sampler.new(harness, injector, 3)
 sampler.stat_handler = Proc.new do |*row|
   table = Text::Table.new
   table.head = %w{target_rate current_rate total_injections}

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Resque::Stress::Harness do
-  let(:harness) {Resque::Stress::Harness.new}
+describe Stressque::Harness do
+  let(:harness) {Stressque::Harness.new}
   describe "#validate!" do
     it "should raise error if name is nil" do
       harness.name = nil
@@ -15,11 +15,11 @@ describe Resque::Stress::Harness do
   end
 
   context "aggregate ops" do
-    let(:queue1) {Resque::Stress::QueueDef.new}
-    let(:queue2) {Resque::Stress::QueueDef.new}
-    let(:job1) {Resque::Stress::JobDef.new} 
-    let(:job2) {Resque::Stress::JobDef.new} 
-    let(:job3) {Resque::Stress::JobDef.new} 
+    let(:queue1) {Stressque::QueueDef.new}
+    let(:queue2) {Stressque::QueueDef.new}
+    let(:job1) {Stressque::JobDef.new} 
+    let(:job2) {Stressque::JobDef.new} 
+    let(:job3) {Stressque::JobDef.new} 
 
     before do
       queue1.name = 'queue1'

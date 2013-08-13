@@ -1,10 +1,10 @@
 require 'timeout'
 require 'spec_helper'
 
-describe Resque::Stress::Sampler do
+describe Stressque::Sampler do
   let(:harness) {double("harness")}
   let(:injector) {double("injector")}
-  let(:sampler) {Resque::Stress::Sampler.new(harness, injector, 0.2)}
+  let(:sampler) {Stressque::Sampler.new(harness, injector, 0.2)}
 
   before do
     allow(harness).to receive(:target_rate) {10}

@@ -22,7 +22,7 @@ end
 
 gem 'jquery-rails'
 gem 'resque'
-gem 'resque-stress', path: File.join('..','..')
+gem 'stressque', path: File.join('..','..')
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
