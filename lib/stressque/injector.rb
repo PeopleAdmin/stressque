@@ -43,6 +43,7 @@ module Stressque
 
     def mark_start
       redis.set(start_key, current_time)
+      sleep(1)
     end
 
     def start_time
