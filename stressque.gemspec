@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Stressque::VERSION
   gem.authors       = ["lwoodson"]
   gem.email         = ["lance@webmaneuvers.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Stresses Resque with redefined app jobs}
+  gem.summary       = gem.description
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
