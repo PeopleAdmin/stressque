@@ -1,7 +1,8 @@
 require 'timeout'
 require 'spec_helper'
 
-Stressque::Injector.send(:public, :mark_time)
+Stressque::Injector.send(:public, :mark_start)
+Stressque::Injector.send(:public, :inject)
 
 describe Stressque::Injector do
   let(:harness) {
@@ -27,8 +28,8 @@ describe Stressque::Injector do
 
   describe "#total_injections" do
     it "should return all injections made" do
-      injector.mark_time(1)
-      injector.mark_time(2)
+      injector.inject
+      injector.inject
       injector.total_injections.should == 2
     end
   end
@@ -39,27 +40,27 @@ describe Stressque::Injector do
     end
 
     it "should return injections per second" do
-      start = Time.now.utc
-      (1..100).each {injector.mark_time}
-      finish = Time.now.utc
-      sleep_time = 1.0 - (finish - start)
-      sleep(sleep_time)
-      (50..100).include?(injector.current_rate).should == true
+      injector.mark_start
+      injector.inject
+      injector.inject
+      sleep(1)
+      injector.current_rate.floor.should == 2.0
     end
   end
 
   describe "#too_fast?" do
     it "should return true when current rate faster than target rate" do
       harness.target_rate = 1.0
-      (1..100).each {injector.mark_time}
-      sleep(0.1)
+      injector.mark_start
+      (1..100).each {injector.inject}
+      sleep(1)
       injector.too_fast?.should == true
     end
 
     it "should return false when current rate slower than target rate" do
       harness.target_rate = 100.0
-      injector.mark_time
-      injector.mark_time
+      injector.inject
+      injector.inject
       injector.too_fast?.should == false
     end
   end

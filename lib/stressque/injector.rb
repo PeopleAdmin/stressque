@@ -11,25 +11,23 @@ module Stressque
     def run
       redis.flushdb
       running = true
+      mark_start
       while(running) do
         if too_fast?
           sleep(0.003)
           next
         end
-        klass = harness.pick_job_def.to_job_class
-        Resque.enqueue klass
-        mark_time
+        inject
       end
     end
 
     def total_injections
-      redis.llen(ts_key)
+      redis.get(injections_key).to_i
     end
 
     def current_rate
-      duration = elapsed_time
-      return 0 if duration == 0
-      total_injections / duration
+      return 0 if elapsed_time == 0
+      total_injections.to_f / elapsed_time
     end
 
     def too_fast?
@@ -37,18 +35,34 @@ module Stressque
     end
 
     private
-    def mark_time(now=Time.now.utc)
-      redis.rpush(ts_key, now.to_f.floor)
+    def inject
+      klass = harness.pick_job_def.to_job_class
+      Resque.enqueue klass
+      redis.incr injections_key
+    end
+
+    def mark_start
+      redis.set(start_key, current_time)
+    end
+
+    def start_time
+      redis.get(start_key).to_i
+    end
+
+    def current_time
+      redis.time.first.to_i
     end
 
     def elapsed_time
-      earliest = redis.lrange(ts_key, 0, 0).first.to_f
-      latest = Time.now.utc.to_f
-      (earliest && latest) ? latest - earliest : 0
+      current_time - start_time
     end
 
-    def ts_key
-      "stressque:timestamps"
+    def injections_key
+      "stressque:#{harness.name}:injections"
+    end
+
+    def start_key
+      "stressque:#{harness.name}:start"
     end
   end
 end
