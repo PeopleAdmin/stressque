@@ -20,7 +20,7 @@ describe Stressque::Injector do
   let(:injector) {Stressque::Injector.new(harness)}
   describe "#run" do
     it "injects jobs into queue" do
-      timeout(0.1) {injector.run} rescue nil
+      timeout(1.1) {injector.run} rescue nil
       Resque.queues.include?('my_queue').should == true
       Resque.pop("my_queue")["class"].should == MyJob.name
     end
@@ -43,7 +43,7 @@ describe Stressque::Injector do
       injector.mark_start
       injector.inject
       injector.inject
-      sleep(1)
+      sleep(0.5)
       injector.current_rate.floor.should == 2.0
     end
   end
