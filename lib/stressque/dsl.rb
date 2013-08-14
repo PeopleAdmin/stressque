@@ -74,8 +74,8 @@ module Stressque
         self.job.class_name = class_name
       end
 
-      def weight(val)
-        job.weight = val
+      def volume(val)
+        job.volume = val
       end
 
       def runtime_min(val)

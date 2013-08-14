@@ -32,9 +32,9 @@ describe Stressque::Harness do
       queue2.jobs << job2
       job2.queue = queue2
 
-      job1.weight = 1
-      job2.weight = 3
-      job3.weight = 2
+      job1.volume = 1
+      job2.volume = 3
+      job3.volume = 2
 
       harness.queues << queue1
       queue1.parent = harness
@@ -48,20 +48,20 @@ describe Stressque::Harness do
         result.should == Set.new([job1, job2, job3])
       end
 
-      it "should have jobs sorted according to weight" do
+      it "should have jobs sorted according to volume" do
         harness.all_jobs.should == [job2, job3, job1]
       end
     end
 
-    describe "#total_weight" do
-      it "should evaluate to the sum of all job weights" do
-        expected = job1.weight + job2.weight + job3.weight
-        harness.total_weight.should == expected
+    describe "#total_volume" do
+      it "should evaluate to the sum of all job volume" do
+        expected = job1.volume + job2.volume + job3.volume
+        harness.total_volume.should == expected
       end
     end
 
     describe "#job_for_roll" do
-      it "should correctly pick job defs according to weighting" do
+      it "should correctly pick job defs according to volume" do
         harness.pick_job_def(0.1).should == job2
         harness.pick_job_def(0.2).should == job2
         harness.pick_job_def(0.3).should == job2

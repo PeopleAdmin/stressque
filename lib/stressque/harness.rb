@@ -21,11 +21,11 @@ module Stressque
     end
 
     def all_jobs
-      queues.map(&:jobs).flatten.sort &reverse_by_weight
+      queues.map(&:jobs).flatten.sort &reverse_by_volume
     end
 
-    def total_weight
-      all_jobs.inject(0) {|memo, job| memo += job.weight}
+    def total_volume
+      all_jobs.inject(0) {|memo, job| memo += job.volume}
     end
 
     def pick_job_def(random=rand)
@@ -38,8 +38,8 @@ module Stressque
     end
 
     private
-    def reverse_by_weight
-      lambda {|i, j| j.weight <=> i.weight}
+    def reverse_by_volume
+      lambda {|i, j| j.volume <=> i.volume}
     end
   end
 end

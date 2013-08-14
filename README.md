@@ -59,14 +59,14 @@ harness :rails_demo do
 
   queue :reports do
     job :sales_report_job do
-      weight 41
+      volume 41
       runtime_min 1
       runtime_max 2
       error_rate 0.1
     end
 
     job :inventory_report_job do
-      weight 39
+      volume 39
       runtime_min 0.5
       runtime_max 1.0
       error_rate 0.2
@@ -75,13 +75,13 @@ harness :rails_demo do
 
   queue :import_export do
     job :import_job do
-      weight 9
+      volume 9
       runtime_min 3
       runtime_max 4
       error_rate 0.3
     end
     job :export_job do
-      weight 11
+      volume 11
       runtime_min 3
       runtime_max 4
       error_rate 0.3
@@ -138,11 +138,11 @@ harness :my_load_scenario do
     # (fast_email will become FastEmail)
     job :fast_email do
 
-      # The weight of the job within the overall
+      # The volume of the job within the overall
       # pool of jobs.  The likelihood a job is
-      # to be enqueued is its weight / sum of all
-      # job weights.  Defaults to 1.
-      weight 5
+      # to be enqueued is its volume / sum of all
+      # job volumes.  Defaults to 1.
+      volume 5
 
       # The minimum amount of time to perform the
       # job.  Defaults to 1.
@@ -162,7 +162,7 @@ harness :my_load_scenario do
 
     # another job within the same queue
     job :slow_email do
-      weight 1
+      volume 1
       runtime_min 5
       runtime_max 10
       error_rate 0.2
@@ -173,7 +173,7 @@ harness :my_load_scenario do
   queue :reports do
     # another job within the queue.
     job :eeo do
-      weight 1
+      volume 1
       error_rate 0.05
     end
   end

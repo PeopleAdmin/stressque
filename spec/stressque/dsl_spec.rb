@@ -10,7 +10,7 @@ describe Stressque::DSL do
 
       queue :my_queue do
         job :my_job do
-          weight 10
+          volume 10
           runtime_min 2
           runtime_max 4
           error_rate 0.1

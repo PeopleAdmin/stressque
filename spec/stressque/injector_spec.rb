@@ -10,7 +10,7 @@ describe Stressque::Injector do
       harness :my_rig do
         queue :my_queue do
           job :my_job do
-            weight 1
+            volume 1
           end
         end
       end

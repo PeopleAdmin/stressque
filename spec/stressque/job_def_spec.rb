@@ -36,14 +36,14 @@ describe Stressque::JobDef do
     end
   end
 
-  describe "#weight" do
+  describe "#volume" do
     it "should default to 1" do
-      job_def.weight.should == 1
+      job_def.volume.should == 1
     end
   end
 
   describe "#likelihood" do
-    it "should be equal to the weight divided by total weight of all jobs" do
+    it "should be equal to the volume divided by total volume of all jobs" do
       job_def.likelihood.should == 1
     end
   end

@@ -3,7 +3,7 @@ require 'active_support/core_ext/string/inflections'
 
 module Stressque
   class JobDef
-    attr_accessor :queue, :weight
+    attr_accessor :queue, :volume
     attr_writer :runtime_min, :runtime_max, :error_rate
     attr_reader :class_name
 
@@ -17,12 +17,12 @@ module Stressque
       @class_name = str.to_s.camelize
     end
 
-    def weight
-      @weight ||= 1
+    def volume
+      @volume ||= 1
     end
 
     def likelihood
-      @likelihood ||= weight.to_f / queue.harness.total_weight
+      @likelihood ||= volume.to_f / queue.harness.total_volume
     end
 
     def runtime_min
