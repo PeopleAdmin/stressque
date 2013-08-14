@@ -42,9 +42,7 @@ describe Stressque::Injector do
     it "should return injections per second" do
       injector.mark_start
       injector.inject
-      injector.inject
-      sleep(0.5)
-      injector.current_rate.floor.should == 2.0
+      injector.current_rate.should == 1.0
     end
   end
 
