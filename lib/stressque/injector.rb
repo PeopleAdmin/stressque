@@ -9,7 +9,6 @@ module Stressque
     end
 
     def run
-      redis.flushdb
       running = true
       mark_start
       while(running) do
