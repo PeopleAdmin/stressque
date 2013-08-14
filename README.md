@@ -91,19 +91,10 @@ end
 ```
 
 Which should be initialized within your app to redefine your workers for stress
-testing...
+testing.  If you are using rails, this is handled by a railtie, otherwise you
+can explicitly do this with...
 
 ```ruby
-require 'resque'
-
-Resque.redis = 'localhost:6379:15'
-Resque.redis.flushdb
-
-require 'stressque'
-
-load File.join(Rails.root, 'lib', 'jobs.rb')
-
-path = File.join(Rails.root, 'config', 'stressque.dsl')
 harness = Stressque::DSL.eval_file(path)
 harness.freeze_classes!
 ```
@@ -111,12 +102,12 @@ harness.freeze_classes!
 Now you can run Resque to pick up any jobs...
 
 ```
-QUEUES=* VVERBOSE=1 be rake resque:work
+STRESSQUE=config/stressque.dsl QUEUES=* VVERBOSE=1 be rake resque:work
 ```
 
 And the test harness to perform injections according to your definition...
 
-```be stressque -c examples/demo.dsl -r localhost:6379:15```
+```be stressque -c examples/demo.dsl```
 
 And watch the injections stream by...
 
