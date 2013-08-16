@@ -1,4 +1,5 @@
 require 'resque'
+require 'resque-clues'
 require "stressque/version"
 require 'stressque/utils'
 require 'stressque/job_def'

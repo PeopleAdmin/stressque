@@ -6,6 +6,10 @@ require 'spec_helper'
 describe Stressque::DSL do
   let(:source) {<<-SRC
     harness :my_rig do
+      event_publisher do
+        Resque::Plugins::Clues::StandardOutPublisher.new
+      end
+
       target_rate 1000
 
       queue :my_queue do
@@ -44,6 +48,10 @@ describe Stressque::DSL do
 
     it "should populate the harness's name" do
       harness.name.should == :my_rig
+    end
+
+    it "should populate resque-clues event publisher" do
+      Resque::Plugins::Clues.event_publisher.should_not be_nil
     end
 
     it "should populate the harness's queues" do

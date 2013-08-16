@@ -204,6 +204,21 @@ CPU use and injection rate with 2 injectors.
 
 ![Two Process Output](http://i.imgur.com/dO9bwtz.png)
 
+Resque Clues
+------------
+You can specify a [resque clues](https://github.com/PeopleAdmin/resque-clues)
+event publisher to broadcast the enqueue events for any jobs enqueued by a test
+harness.  Do this with the event_publisher DSL element.
+
+```ruby
+harness :foo do
+  event_publisher do
+    Resque::Plugins::Clues::StandardOutPublisher.new
+  end
+  # rest of your def...
+end
+```
+
 From Here
 ---------
 Here are a few things I'd like to do.
