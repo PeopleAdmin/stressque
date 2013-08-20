@@ -50,7 +50,7 @@ module Stressque
     end
 
     def current_time
-      redis.time.first.to_i
+      redis.info.fetch("uptime_in_seconds").to_i
     end
 
     def elapsed_time
