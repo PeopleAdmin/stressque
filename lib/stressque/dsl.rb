@@ -46,7 +46,7 @@ module Stressque
       end
 
       def target_rate(val)
-        harness.target_rate = val
+        harness.target_rate = ENV.fetch('TARGET_RATE', val).to_i
       end
     end
 

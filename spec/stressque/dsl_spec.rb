@@ -54,6 +54,11 @@ describe Stressque::DSL do
       harness.target_rate.should == 1000
     end
 
+    it "should allow TARGET_RATE env variable to override target rate in dsl file" do
+      ENV['TARGET_RATE'] = 1.to_s
+      Stressque::DSL.eval(source).target_rate.should == 1
+    end
+
     it "should set the queue's parent as the harness" do
       queue.parent.should == harness
     end
