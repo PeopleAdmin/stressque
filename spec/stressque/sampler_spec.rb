@@ -14,7 +14,8 @@ describe Stressque::Sampler do
 
   describe "#current_stats" do
     it "should return tuple of target rate, current rate and total injections" do
-      target_rate, current_rate, total_injections = sampler.current_stats
+      time, target_rate, current_rate, total_injections = sampler.current_stats
+      time.should_not be_nil
       target_rate.should == 10
       current_rate.should == 9.9
       total_injections.should == 1000

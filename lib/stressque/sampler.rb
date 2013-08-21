@@ -10,7 +10,7 @@ module Stressque
     end
 
     def current_stats
-      [harness.target_rate, injector.current_rate, injector.total_injections]
+      [Time.now, harness.target_rate, injector.current_rate, injector.total_injections]
     end
 
     def stat_handler=(callable)

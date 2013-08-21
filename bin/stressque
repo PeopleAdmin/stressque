@@ -33,7 +33,7 @@ injector = Stressque::Injector.new(harness)
 sampler = Stressque::Sampler.new(harness, injector, 3)
 sampler.stat_handler = Proc.new do |*row|
   table = Text::Table.new
-  table.head = %w{target_rate current_rate total_injections}
+  table.head = %w{time target_rate current_rate total_injections}
   table.rows << row
   puts table
 end
