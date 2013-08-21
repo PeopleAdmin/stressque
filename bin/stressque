@@ -1,5 +1,15 @@
 #!/usr/bin/env ruby
 require 'resque'
+
+# Load resque-clues if its available to be able to
+# analyze the throughput, otherwise fail silently.
+begin
+  require 'resque-clues'
+  Resque::Plugins::Clues.event_publisher = \
+    Resque::Plugins::Clues::NoOpPublisher.new
+rescue LoadError
+end
+
 require 'text-table'
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)

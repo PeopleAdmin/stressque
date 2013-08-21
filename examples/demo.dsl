@@ -1,13 +1,6 @@
 # the top-level harness block defines a test
 # harness.
 harness :my_load_scenario do
-  # The event publisher to use for resque clues
-  # to push resque events to some external data
-  # store for analysis.
-  event_publisher do
-    Resque::Plugins::Clues::StandardOutPublisher.new
-  end
-
   # target_rate defines the target rate of jobs
   # enqueued per second.
   target_rate 10

@@ -40,10 +40,6 @@ module Stressque
         self.harness.name = name
       end
 
-      def event_publisher(&block)
-        Resque::Plugins::Clues.event_publisher = block.call
-      end
-
       def queue(name, &block)
         queue_context = QueueDefContext.new(name, self.harness)
         harness.queues << queue_context.eval(&block)
