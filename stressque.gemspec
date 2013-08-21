@@ -17,7 +17,6 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["bin", "lib"]
   gem.add_dependency "resque"
-  gem.add_dependency "activesupport"
   gem.add_dependency "mixlib-cli"
   gem.add_dependency "text-table"
   gem.add_development_dependency "rake"

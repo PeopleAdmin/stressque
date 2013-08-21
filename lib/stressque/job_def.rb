@@ -1,5 +1,4 @@
 require 'set'
-require 'active_support/core_ext/string/inflections'
 
 module Stressque
   class JobDef
@@ -13,8 +12,8 @@ module Stressque
     end
 
     def class_name=(str)
-      raise "Invalid class name: #{str}" if str.to_s.camelize.empty?
-      @class_name = str.to_s.camelize
+      raise "Invalid class name: #{str}" if camelize(str).empty?
+      @class_name = camelize(str)
     end
 
     def volume
@@ -55,6 +54,10 @@ module Stressque
     end
 
     private
+    def camelize(val)
+      val.to_s.split('_').map(&:capitalize).join
+    end
+
     def define_job_class
       class_def = <<-SRC
         class ::#{class_name}
