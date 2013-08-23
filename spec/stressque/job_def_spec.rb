@@ -36,6 +36,12 @@ describe Stressque::JobDef do
     end
   end
 
+  describe "#activity" do
+    it "should default to 0.3" do
+      job_def.activity.should == 0.3
+    end
+  end
+
   describe "#volume" do
     it "should default to 1" do
       job_def.volume.should == 1

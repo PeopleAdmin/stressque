@@ -86,6 +86,10 @@ module Stressque
         job.runtime_max = val
       end
 
+      def activity(val)
+        job.activity = val
+      end
+
       def error_rate(val)
         job.error_rate = val
       end

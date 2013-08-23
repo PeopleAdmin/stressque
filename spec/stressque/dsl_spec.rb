@@ -13,6 +13,7 @@ describe Stressque::DSL do
           volume 10
           runtime_min 2
           runtime_max 4
+          activity 0.5
           error_rate 0.1
         end
       end
@@ -81,6 +82,10 @@ describe Stressque::DSL do
 
     it "should populate the job's runtime_max" do
       job.runtime_max.should == 4
+    end
+
+    it "should populate the job's activity" do
+      job.activity.should == 0.5
     end
 
     it "should populate the job's error_rate" do

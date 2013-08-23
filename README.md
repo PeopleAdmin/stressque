@@ -62,6 +62,7 @@ harness :rails_demo do
       volume 41
       runtime_min 1
       runtime_max 2
+      activity 0.5
       error_rate 0.1
     end
 
@@ -69,6 +70,7 @@ harness :rails_demo do
       volume 39
       runtime_min 0.5
       runtime_max 1.0
+      activity 0.5
       error_rate 0.2
     end
   end
@@ -78,12 +80,14 @@ harness :rails_demo do
       volume 9
       runtime_min 3
       runtime_max 4
+      activity 0.5
       error_rate 0.3
     end
     job :export_job do
       volume 11
       runtime_min 3
       runtime_max 4
+      activity 0.5
       error_rate 0.3
     end
   end
@@ -153,6 +157,11 @@ harness :my_load_scenario do
       # random between runtime_min..runtime_max
       runtime_max 10
 
+      # The approximate percentage of a job's
+      # runtime where the CPU is pegged.  Defaults
+      # to 0.3.
+      activity 0.5
+
       # The error_rate to maintain within the job.
       # Approximately this percentage of enqueues
       # will result in a failure of the job.  The
@@ -165,6 +174,7 @@ harness :my_load_scenario do
       volume 1
       runtime_min 5
       runtime_max 10
+      activity 0.5
       error_rate 0.2
     end
   end

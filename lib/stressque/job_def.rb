@@ -3,7 +3,7 @@ require 'set'
 module Stressque
   class JobDef
     attr_accessor :queue, :volume
-    attr_writer :runtime_min, :runtime_max, :error_rate
+    attr_writer :runtime_min, :runtime_max, :activity, :error_rate
     attr_reader :class_name
 
     def initialize
@@ -30,6 +30,10 @@ module Stressque
 
     def runtime_max
       @runtime_max ||= 1
+    end
+
+    def activity
+      @activity ||= 0.3
     end
 
     def error_rate
@@ -66,9 +70,10 @@ module Stressque
           @queue = :#{queue.name}
           @runtime_range = #{runtime_min}.to_f..#{runtime_max}.to_f
           @error_rate = #{error_rate}
+          @activity = #{activity}
 
           def self.perform
-            hard_sleep(normalized_rand(@runtime_range))
+            active_sleep(normalized_rand(@runtime_range), @activity)
             raise "FAILED" if rand <= @error_rate
           end
         end
