@@ -111,7 +111,7 @@ STRESSQUE=config/stressque.dsl QUEUES=* VVERBOSE=1 be rake resque:work
 
 And the test harness to perform injections according to your definition...
 
-```be stressque -c examples/demo.dsl```
+```bundle exec stressque -c examples/demo.dsl```
 
 And watch the injections stream by...
 
@@ -202,7 +202,7 @@ Open 3 terminals, in the first, run top...
 
 In the second terminal run the examples/as_fast_as_you_can.dsl file...
 
-```be bin/stressque -c examples/as_fast_as_you_can```
+```bundle exec bin/stressque -c examples/as_fast_as_you_can```
 
 View the CPU use and injection rate with 1 injector...
 
