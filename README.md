@@ -106,7 +106,7 @@ harness.freeze_classes!
 Now you can run Resque to pick up any jobs...
 
 ```
-STRESSQUE=config/stressque.dsl QUEUES=* VVERBOSE=1 be rake resque:work
+STRESSQUE=config/stressque.dsl QUEUES=* VERBOSE=1 be rake resque:work
 ```
 
 And the test harness to perform injections according to your definition...
