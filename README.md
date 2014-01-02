@@ -1,7 +1,16 @@
 stressque
 =============
+Stressque allows stress testing of Resque workers using simulated load.  This
+is useful to do longevity testing when
 
-Stress testing of Resque workers.
+* Changing job/queue assignments
+* Changing worker server hardware
+* Changing worker server topology
+
+Using it in a representative test environment with a performance measurement
+tool like [resque clues](https://github.com/PeopleAdmin/resque-clues) will
+allow you to get some idea of approximate change in production prior to making
+those potentially disruptive changes.
 
 Usage
 -----
@@ -231,7 +240,7 @@ end
 
 From Here
 ---------
-Here are a few things I'd like to do.
+Here are a few things we would like to do.
 
 1. Per-job rate tracking
 2. Rate equalization profile (throttle up, parabollas, etc..)
