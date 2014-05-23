@@ -38,12 +38,25 @@ sampler.stat_handler = Proc.new do |*row|
   table.rows << row
   puts table
 end
-if pid=fork
-  p "Running the injector (#{$$})"
+
+injector_pid = fork do
+  puts "Running the injector (#{$$})"
   injector.run
   puts "Exiting the injector"
-else
-  p "Running the sampler (#{$$})"
-  sampler.run
-  puts "Exiting the sampler"
 end
+
+Signal.trap("INT") do
+  puts "Exiting sampler(#{$$}) and injector(#{injector_pid})"
+  Process.kill("INT", injector_pid)
+  Kernel.exit(0)
+end
+
+Signal.trap("TERM") do
+  puts "Exiting sampler(#{$$}) and injector(#{injector_pid})"
+  Process.kill("TERM", injector_pid)
+  Kernel.exit(0)
+end
+
+puts "Running the sampler (#{$$})"
+sampler.run
+puts "Exiting the sampler"
