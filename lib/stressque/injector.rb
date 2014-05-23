@@ -9,6 +9,7 @@ module Stressque
     end
 
     def run
+      reset!
       running = true
       mark_start
       while(running) do
@@ -34,6 +35,11 @@ module Stressque
     end
 
     private
+    def reset!
+      redis.del start_key
+      redis.del injections_key
+    end
+
     def inject
       klass = harness.pick_job_def.to_job_class
       Resque.enqueue klass
